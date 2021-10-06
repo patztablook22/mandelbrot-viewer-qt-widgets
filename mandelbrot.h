@@ -12,8 +12,9 @@ using Scalar = double;
 
 /*
  * receives c = a + bi
- * returns how early does it diverge
+ * returns how early does it diverge normed to max = 0xff
  *
  */
 
-int mandelbrot(complex<Scalar> &c);
+int mandelbrot(const complex<Scalar> &c, int = 255);
+int mandelbrot(Scalar, Scalar, int = 255);
