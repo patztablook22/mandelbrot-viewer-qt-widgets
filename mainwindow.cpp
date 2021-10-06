@@ -7,11 +7,14 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->menubar->hide();
     scene =  new QGraphicsScene(this);
     // QGraphicsView* v = ui->graphicsView;
     qi = QImage(500, 500, QImage::Format_RGB888);
     qpi = scene->addPixmap(QPixmap::fromImage(qi));
     ui->graphicsView->setScene(scene);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->centralwidget->installEventFilter(this);
     render();
 }
@@ -40,8 +43,22 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             // scale down
             setScale(scale - 0.1);
             break;
+        case Qt::Key_Alt:
+        case Qt::Key_AltGr:
+        case Qt::Key_Menu:
+            // toggle menu
+            if (ui->menubar->isHidden())
+                ui->menubar->show();
+            else
+                ui->menubar->hide();
         }
         return true;
+    } else if (event->type() == QEvent::Resize) {
+        qi = QImage(
+                    ui->graphicsView->size(),
+                    QImage::Format_RGB888
+        );
+        render();
     }
     return false;
 }
